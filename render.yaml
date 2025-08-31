@@ -1,7 +1,11 @@
 services:
   - type: web
-    name: ai-agent-dashboard
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python app.py"
-    autoDeploy: true
+    name: ai-agent-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.13.4
