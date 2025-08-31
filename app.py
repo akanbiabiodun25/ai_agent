@@ -98,5 +98,7 @@ def fake_llm_response(model, prompt):
     return f"[Model: {model}] Response to prompt:\n\n{prompt}"
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=10000)
