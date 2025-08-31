@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: unified-ai-agent-dashboard
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: X_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

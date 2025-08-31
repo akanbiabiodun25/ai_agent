@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-robot me-2"></i>AI Agent Dashboard
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-outline-light btn-sm" id="themeToggle">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Header Section -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="display-4 fw-bold mb-3">Unified AI Agent Dashboard</h1>
+                <p class="lead text-muted">Powered by multiple LLMs with multi-modal input support</p>
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <span class="badge bg-primary fs-6">15+ AI Agents</span>
+                    <span class="badge bg-success fs-6">Multi-Modal Input</span>
+                    <span class="badge bg-info fs-6">3 LLM Models</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="row">
+            <!-- Left Panel - Configuration -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-cog me-2"></i>Configuration
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="agentForm">
+                            <!-- Agent Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Select AI Agent</label>
+                                <select class="form-select" id="agentSelect" name="agent" required>
+                                    <option value="">Choose an agent...</option>
+
+                                    <option value="fintech_analyst">Fintech Analyst - Market insights from trends
+                                    </option>
+
+                                    <option value="support_bot">Support Bot - Summarize support tickets</option>
+
+                                    <option value="payment_manager">Payment Manager - Detect billing/transaction issues
+                                    </option>
+
+                                    <option value="credit_advisor">Credit Advisor - Smart lending decisions</option>
+
+                                    <option value="faq_bot">FAQ Bot - Customer support with known answers</option>
+
+                                    <option value="sales_closer">Sales Closer - Handle objections and convert leads
+                                    </option>
+
+                                    <option value="hiring_funnel">Hiring Funnel - Pre-screen applicants</option>
+
+                                    <option value="bpa_optimizer">BPA Optimizer - Recommend process automation</option>
+
+                                    <option value="compliance_officer">Compliance Officer - Flag regulatory issues
+                                    </option>
+
+                                    <option value="portfolio_recommender">Portfolio Recommender - Investment guidance
+                                    </option>
+
+                                    <option value="onboarding_bot">Onboarding Bot - New customer flow suggestions
+                                    </option>
+
+                                    <option value="transaction_monitor">Transaction Monitor - Flag suspicious patterns
+                                    </option>
+
+                                    <option value="business_reporter">Business Reporter - Convert logs to summaries
+                                    </option>
+
+                                    <option value="lead_generator">Lead Generator - Extract and rank potential leads
+                                    </option>
+
+                                    <option value="fraud_detector">Fraud Detector - Flag risky behaviors</option>
+
+                                    <option value="pos_compliance_advisor">PoS Compliance Advisor - Nigerian CBN PoS
+                                        regulations and geo-tagging compliance</option>
+
+                                    <option value="account_closer">Account Closer - Help users close accounts safely
+                                    </option>
+
+                                </select>
+                            </div>
+
+                            <!-- Model Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Select LLM Model</label>
+                                <select class="form-select" id="modelSelect" name="model" required>
+                                    <option value="">Choose a model...</option>
+
+                                    <option value="openrouter_gpt5">OpenRouter GPT-5</option>
+
+                                    <option value="xai_grok">xAI Grok</option>
+
+                                    <option value="gemini">Google Gemini</option>
+
+                                </select>
+                            </div>
+
+                            <!-- Input Type Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Input Type</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="input_type" id="textInput" value="text"
+                                        checked>
+                                    <label class="btn btn-outline-primary" for="textInput">
+                                        <i class="fas fa-keyboard me-1"></i>Text
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="input_type" id="fileInput" value="file">
+                                    <label class="btn btn-outline-primary" for="fileInput">
+                                        <i class="fas fa-file me-1"></i>File
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Text Input -->
+                            <div id="textInputSection" class="mb-4">
+                                <label class="form-label fw-semibold">Your Message</label>
+                                <textarea class="form-control" id="textMessage" name="text_input" rows="4"
+                                    placeholder="Enter your text here..."></textarea>
+                            </div>
+
+                            <!-- File Input -->
+                            <div id="fileInputSection" class="mb-4" style="display: none;">
+                                <label class="form-label fw-semibold">Upload File</label>
+                                <input type="file" class="form-control" id="fileUpload" name="file"
+                                    accept=".pdf,.txt,.png,.jpg,.jpeg,.wav">
+                                <div class="form-text">
+                                    Supported: PDF, TXT, PNG, JPG, WAV files (max 16MB)
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                                <i class="fas fa-paper-plane me-2"></i>Process with AI Agent
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Response -->
+            <div class="col-lg-8">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-comments me-2"></i>AI Agent Response
+                        </h5>
+                        <button class="btn btn-outline-secondary btn-sm" id="historyBtn">
+                            <i class="fas fa-history me-1"></i>History
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="responseSection">
+                            <div class="text-center text-muted py-5">
+                                <i class="fas fa-robot fa-3x mb-3 opacity-50"></i>
+                                <p>Select an agent and provide input to get started</p>
+                            </div>
+                        </div>
+
+                        <div id="loadingSection" style="display: none;">
+                            <div class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3 text-muted">AI Agent is processing your request...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agent Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-center mb-4">Available AI Agents</h3>
+                <div class="row g-3">
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="fintech_analyst">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Fintech Analyst</h6>
+                                <p class="card-text text-muted small">Market insights from trends</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="support_bot">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Support Bot</h6>
+                                <p class="card-text text-muted small">Summarize support tickets</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="payment_manager">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Payment Manager</h6>
+                                <p class="card-text text-muted small">Detect billing/transaction issues</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="credit_advisor">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Credit Advisor</h6>
+                                <p class="card-text text-muted small">Smart lending decisions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="faq_bot">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">FAQ Bot</h6>
+                                <p class="card-text text-muted small">Customer support with known answers</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="sales_closer">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Sales Closer</h6>
+                                <p class="card-text text-muted small">Handle objections and convert leads</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="hiring_funnel">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Hiring Funnel</h6>
+                                <p class="card-text text-muted small">Pre-screen applicants</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="bpa_optimizer">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">BPA Optimizer</h6>
+                                <p class="card-text text-muted small">Recommend process automation</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="compliance_officer">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Compliance Officer</h6>
+                                <p class="card-text text-muted small">Flag regulatory issues</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="portfolio_recommender">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Portfolio Recommender</h6>
+                                <p class="card-text text-muted small">Investment guidance</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="onboarding_bot">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Onboarding Bot</h6>
+                                <p class="card-text text-muted small">New customer flow suggestions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="transaction_monitor">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Transaction Monitor</h6>
+                                <p class="card-text text-muted small">Flag suspicious patterns</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="business_reporter">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Business Reporter</h6>
+                                <p class="card-text text-muted small">Convert logs to summaries</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="lead_generator">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Lead Generator</h6>
+                                <p class="card-text text-muted small">Extract and rank potential leads</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="fraud_detector">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Fraud Detector</h6>
+                                <p class="card-text text-muted small">Flag risky behaviors</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="pos_compliance_advisor">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">PoS Compliance Advisor</h6>
+                                <p class="card-text text-muted small">Nigerian CBN PoS regulations and geo-tagging
+                                    compliance</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card agent-card h-100" data-agent="account_closer">
+                            <div class="card-body text-center">
+                                <div class="agent-icon mb-3">
+                                    <i class="fas fa-robot fa-2x text-primary"></i>
+                                </div>
+                                <h6 class="card-title">Account Closer</h6>
+                                <p class="card-text text-muted small">Help users close accounts safely</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5 mb-5">
+            <div class="col-12">
+                <h3 class="text-center mb-4">Multi-Modal Input Support</h3>
+                <div class="row g-4">
+                    <div class="col-md-3 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-keyboard fa-3x text-primary"></i>
+                        </div>
+                        <h5>Text Input</h5>
+                        <p class="text-muted">Direct text communication</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-microphone fa-3x text-success"></i>
+                        </div>
+                        <h5>Voice Transcription</h5>
+                        <p class="text-muted">WAV audio file processing</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-file-pdf fa-3x text-danger"></i>
+                        </div>
+                        <h5>Document Extraction</h5>
+                        <p class="text-muted">PDF and TXT file analysis</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-image fa-3x text-warning"></i>
+                        </div>
+                        <h5>Image OCR</h5>
+                        <p class="text-muted">PNG/JPG text extraction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal fade" id="historyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Conversation History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="historyContent">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
+<script>
+    window.__lindy_frame_handlers_initialized ||= (() => {
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'navigate') {
+                const { path } = event.data
+
+                const url = new URL(path, window.location.origin)
+
+                window.location.href = url.toString()
+            } else if (event.data.type === 'navigate-back') {
+                window.history.back()
+            } else if (event.data.type === 'navigate-forward') {
+                window.history.forward()
+            } else if (event.data.type === 'reload') {
+                window.location.reload()
+            }
+        })
+
+        let currentHistoryIndex = window.history.length - 1
+
+        function sendNavigationState() {
+            window.parent.postMessage({
+                type: 'navigation-state',
+                state: {
+                    canGoBack: currentHistoryIndex > 0,
+                    canGoForward: currentHistoryIndex < window.history.length - 1,
+                    path: window.location.pathname,
+                    href: window.location.href,
+                    title: document.title,
+                },
+            }, '*')
+        }
+
+        function watchForNavigationChange(currentPath, attempts = 0) {
+            if (attempts > 10) {
+                return
+            }
+
+            if (window.location.pathname === currentPath) {
+                setTimeout(() => watchForNavigationChange(currentPath, attempts + 1), 100)
+            } else {
+                sendNavigationState()
+            }
+        }
+
+        window.addEventListener('popstate', () => {
+            currentHistoryIndex--
+            sendNavigationState()
+        })
+
+        window.history.pushState = new Proxy(window.history.pushState, {
+            apply: (target, thisArg, argArray) => {
+                currentHistoryIndex = window.history.length
+                watchForNavigationChange(window.location.pathname)
+                return target.apply(thisArg, argArray)
+            },
+        })
+
+        window.history.replaceState = new Proxy(window.history.replaceState, {
+            apply: (target, thisArg, argArray) => {
+                currentHistoryIndex = window.history.length
+                watchForNavigationChange(window.location.pathname)
+                return target.apply(thisArg, argArray)
+            },
+        })
+
+        function sendPageLoaded() {
+            window.parent.postMessage({
+                type: 'page-loaded',
+            }, '*')
+        }
+
+        if (document.readyState === 'complete') {
+            sendPageLoaded()
+        } else {
+            window.addEventListener('load', sendPageLoaded)
+        }
+
+        sendNavigationState()
+
+        return true
+    })()
+</script>

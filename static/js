@@ -1,0 +1,102 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const agentForm = document.getElementById('agentForm');
+    const inputTypeRadios = document.getElementsByName('input_type');
+    const textInputSection = document.getElementById('textInputSection');
+    const fileInputSection = document.getElementById('fileInputSection');
+    const responseSection = document.getElementById('responseSection');
+    const loadingSection = document.getElementById('loadingSection');
+
+    let uploadedFilePath = '';
+
+    // 🌙 Theme Toggle
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-bs-theme', newTheme);
+        themeIcon.classList.toggle('fa-sun');
+        themeIcon.classList.toggle('fa-moon');
+    });
+
+    // 📂 Input Type Toggle
+    inputTypeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.value === 'text') {
+                textInputSection.style.display = 'block';
+                fileInputSection.style.display = 'none';
+            } else {
+                textInputSection.style.display = 'none';
+                fileInputSection.style.display = 'block';
+            }
+        });
+    });
+
+    // 📥 Form Submission
+    agentForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Hide response and show loading
+        responseSection.style.display = 'none';
+        loadingSection.style.display = 'block';
+
+        const formData = new FormData(agentForm);
+        const inputType = formData.get('input_type');
+
+        if (inputType === 'file') {
+            const file = document.getElementById('fileUpload').files[0];
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const fileForm = new FormData();
+            fileForm.append('file', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: fileForm
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        formData.append('uploaded_file_path', data.file_path);
+                        sendToAgent(formData);
+                    }
+                })
+                .catch(err => showError('Upload failed: ' + err));
+        } else {
+            sendToAgent(formData);
+        }
+    });
+
+    // 🚀 Send to AI Agent
+    function sendToAgent(formData) {
+        fetch('/run_agent', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    responseSection.innerHTML = `<pre>${data.response}</pre>`;
+                }
+            })
+            .catch(err => showError('An unexpected error occurred: ' + err))
+            .finally(() => {
+                loadingSection.style.display = 'none';
+                responseSection.style.display = 'block';
+            });
+    }
+
+    // ❗ Error Display
+    function showError(message) {
+        responseSection.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+        loadingSection.style.display = 'none';
+        responseSection.style.display = 'block';
+    }
+});

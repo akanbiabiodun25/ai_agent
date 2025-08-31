@@ -1,0 +1,71 @@
+/* General Body Styles */
+body {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light Theme Variables */
+[data-bs-theme='light'] {
+    --bs-body-bg: #f0f2f5;
+    --bs-body-color: #212529;
+    --bs-border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --output-bg: #f8f9fa;
+}
+
+/* Dark Theme Variables */
+[data-bs-theme='dark'] {
+    --bs-body-bg: #1a1a1a;
+    --bs-body-color: #e8e6e3;
+    --bs-border-color: #444;
+    --card-bg: #2a2a2a;
+    --output-bg: #333333;
+}
+
+/* Applying theme variables */
+body {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--bs-border-color);
+}
+
+#output-area {
+    background-color: var(--output-bg) !important;
+    color: var(--bs-body-color);
+    white-space: pre-wrap; /* Ensures response text wraps */
+    font-family: monospace;
+}
+
+/* Custom Styles */
+.container-fluid {
+    max-width: 1600px;
+}
+
+header {
+    background-color: var(--card-bg);
+    border-bottom-color: var(--bs-border-color) !important;
+}
+
+.form-check-input:checked {
+    background-color: #8a2be2; /* A nice purple for the toggle */
+    border-color: #8a2be2;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+[data-bs-theme='dark'] .btn-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.2em;
+}
